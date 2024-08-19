@@ -3,9 +3,9 @@ results = {
     players = {},
     current_round = {},
     reset = function ()
-        current_round = {}
-        results = {}
-        players = {}
+        results.current_round = {}
+        results.results = {}
+        results.players = {}
     end,
     init = function()
         global.game_state = "results"
@@ -19,10 +19,10 @@ results = {
         end
         add(results.current_round, {
             player = player.name,
-            points = total_points
+            points = total_points,
+            flag = player.flag
         })
         
-        -- Processar outros concorrentes
         for _, competitor in ipairs(results.players) do
             local competitor_points = 0
             for j = 1, 5 do
@@ -32,7 +32,8 @@ results = {
             end
             add(results.current_round, {
                 player = competitor.name,
-                points = competitor_points
+                points = competitor_points,
+                flag = competitor.flag
             })
         end
 
@@ -43,7 +44,7 @@ results = {
     update = function()
         if btnp(4) then
             fade(true, function ()
-			    title_screen.init() 
+                classification.init() 
             end)
         end
     end,
@@ -51,12 +52,9 @@ results = {
     draw = function()
         cls()
         palt(0, true)
-        rectfill(0,0,127,127,9)
-        rectfill(0,48,127,127-48,14)
-        pal(9,129,1)
-        pal(14,140,1)
+        bg(48,32)
         -- Desenha as instruções na tela
-        printc("rodada #"..#results.results, 20, 7)
+        title("rodada #"..#results.results)
     
         -- Desenhar sprite 8x8 (substitua 'spritenum' pelo número do sprite)
         spr(player.flag, 8, 60)
@@ -66,18 +64,13 @@ results = {
     
         -- Itera sobre os tiros para desenhar as bolinhas e somar os pontos
         for i, shot in ipairs(shots.shots) do
-            local points = shot.point or 0
-            -- Desenhar bolinhas
-            for j = 1, 5 do
-                local color = (j <= points) and 11 or 8 -- Verde para pontos, vermelho para o restante
-                circfill(50 + (j * 10), 64, 2, color)
-            end
+            local color = shot.success and 11 or 8 -- Verde para pontos, vermelho para o restante
+            circfill(56 + (i * 8), 64, 2, color)
         end
     
         -- Soma de pontos
         print(total_points, 110, 62, 7)
     
-        print("ok🅾️", 105, 115, 7)
+        actions(true)
     end
 }
-

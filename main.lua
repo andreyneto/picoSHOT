@@ -6,7 +6,7 @@ states = {
     how_to_play = how_to_play,
     shots = shots,
     classification = classification,
-    podium = podium,
+    game_over = game_over,
     results = results,
 }
 global = {
@@ -39,7 +39,7 @@ function draw_fade(t, dir)
                 r *= 0.2
                 r = flr(mid(0, r, max_r))
                 
-                if (r > 0) rectfill(i * size - r, j * size - r, i * size + r, j * size + r, 0)
+                if (r > 0) rectfill(i * size - r, j * size - r, i * size + r, j * size + r, 9)
             end
         end
     else
@@ -52,7 +52,7 @@ function draw_fade(t, dir)
                 r *= 0.2
                 r = flr(mid(0, r, max_r))
                 
-                if (r > 0) rectfill(i * size - r, j * size - r, i * size + r, j * size + r, 0)
+                if (r > 0) rectfill(i * size - r, j * size - r, i * size + r, j * size + r, 9)
             end 
         end
     end
@@ -116,7 +116,7 @@ end
 -- print centered
 function printc(str,y,clr)
 	local x=64-(#str*4)/2
-	print(str,x,y,clr)
+	print(str,x+1,y,clr)
 end
 
 -- print shadow
@@ -128,4 +128,40 @@ end
 -- Função de interpolação linear
 function lerp(a, b, t)
     return a + (b - a) * t
+end
+
+function title(title, color)
+    printc(title, 12, color or 7)
+end
+
+function actions(confirm, back, offset)
+    offset = offset or 0
+    if(confirm) print("ok🅾️", 109, 115, btn(🅾️) and 7 or 1)
+    if(back) print("❎voltar", 4 + offset, 115, btn(❎) and 7 or 1)
+end
+
+function bg(y, h)
+    y = y or 39
+    h = h or 53
+
+    pal(9,129,1)
+    pal(14,140,1)
+    rectfill(0,0,127,127,9)
+    -- Linha superior externa
+    line(0, y-12, 128, y-12, 14)
+    
+    -- Linha inferior externa
+    line(0, y+h+12, 128, y+h+12, 14)
+    
+    -- Retângulo central externo
+    rectfill(0, y-10, 127, y+h+10, 14)
+    
+    -- Linha superior interna
+    line(0, y-2, 128, y-2, 12)
+    
+    -- Linha inferior interna
+    line(0, y+h+2, 128, y+h+2, 12)
+    
+    -- Retângulo central interno
+    rectfill(0, y, 127, y+h, 12)
 end

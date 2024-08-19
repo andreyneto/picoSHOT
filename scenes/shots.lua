@@ -28,7 +28,7 @@ shots = {
         shots.shot_y = 0
         shots.shots = {}
         shots.max_shots = 5
-        shots.current_shot = 1
+        shots.current_shot = 0
         shots.next_shot_timer = 5 * 60
         shots.radius_limit = 36
         shots.shake_intensity = 0
@@ -194,7 +194,7 @@ shots = {
                     shots.precision = player.precision  -- Reinicia a precisão do jogador
                 else
                     fade(true, function ()
-                        global.game_state = "results"
+                        results.init()
                     end)
                 end
             end

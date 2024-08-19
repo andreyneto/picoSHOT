@@ -66,59 +66,61 @@ select_character = {
             oscillation_deceleration = 0.975,
             randomness_factor = 0.2
         },
-                -- {
-        --     name = "sOPHIE",
-        --     nationality = "Francesa",
-        --     flag = 52,
-        --     spr = 65,
-        --     precision = 50,
-        --     oscillation_speed = 1,
-        --     description = "A ARTISTA,ELEGANCIA E PRECISAO",
-        --     adjust_speed = 1,
-        --     precision_recovery_rate = 5,
-        --     precision_decay_rate = 0.75,
-        --     oscillation_deceleration = 0.975,
-        --     randomness_factor = 1
-        -- },
-        -- {
-        --     name = "yE-JI",
-        --     nationality = "Coreana",
-        --     flag = 53,
-        --     precision = 50,
-        --     oscillation_speed = 1,
-        --     description = "A FUTURISTA,TECNOLOGIA E PRECISAO",
-        --     adjust_speed = 0.9,
-        --     precision_recovery_rate = 5,
-        --     precision_decay_rate = 0.75,
-        --     oscillation_deceleration = 0.975,
-        --     randomness_factor = 1
-        -- },
-        -- {
-        --     name = "yUSUF",
-        --     nationality = "Turco",
-        --     flag = 54,
-        --     precision = 50,
-        --     oscillation_speed = 1,
-        --     description = "O SIMPLES,EFICACIA E DETERMINACAO",
-        --     adjust_speed = 1,
-        --     precision_recovery_rate = 5,
-        --     precision_decay_rate = 0.75,
-        --     oscillation_deceleration = 0.975,
-        --     randomness_factor = 1
-        -- },
-        -- {
-        --     name = "nASCIMENTO",
-        --     nationality = "Brasileiro",
-        --     flag = 55,
-        --     precision = 50,
-        --     oscillation_speed = 1,
-        --     description = "O CAPITAO,ESTRATEGIA E AUTORIDADE",
-        --     adjust_speed = 1,
-        --     precision_recovery_rate = 5,
-        --     precision_decay_rate = 0.75,
-        --     oscillation_deceleration = 0.975,
-        --     randomness_factor = 1
-        -- }
+    },
+    extras = {
+        {
+    name = "sOPHIE",
+    nationality = "Francesa",
+    flag = 127,
+    spr = 65,
+    precision = 50,
+    oscillation_speed = 1,
+    description = "A ARTISTA,ELEGANCIA E PRECISAO",
+    adjust_speed = 1,
+    precision_recovery_rate = 5,
+    precision_decay_rate = 0.75,
+    oscillation_deceleration = 0.975,
+    randomness_factor = 1
+},
+{
+    name = "lUCA",
+    nationality = "Italiano",
+    flag = 143,
+    precision = 50,
+    oscillation_speed = 1,
+    description = "O MAESTRO, ELEGÂNCIA E PRECISÃO",
+    adjust_speed = 0.9,
+    precision_recovery_rate = 5,
+    precision_decay_rate = 0.75,
+    oscillation_deceleration = 0.975,
+    randomness_factor = 1
+},
+{
+    name = "lARS",
+    nationality = "Sueco",
+    flag = 159,
+    precision = 50,
+    oscillation_speed = 1,
+    description = "O VIKING, FORÇA E RESILIÊNCIA",
+    adjust_speed = 1,
+    precision_recovery_rate = 5,
+    precision_decay_rate = 0.75,
+    oscillation_deceleration = 0.975,
+    randomness_factor = 1
+},
+{
+    name = "nASCIMENTO",
+    nationality = "Brasileiro",
+    flag = 175,
+    precision = 50,
+    oscillation_speed = 1,
+    description = "O CAPITAO,ESTRATEGIA E AUTORIDADE",
+    adjust_speed = 1,
+    precision_recovery_rate = 5,
+    precision_decay_rate = 0.75,
+    oscillation_deceleration = 0.975,
+    randomness_factor = 1
+}
     },
 
     update = function()
@@ -142,8 +144,11 @@ select_character = {
         select_character.arrow_y_offset = select_character.arrow_oscillation_amplitude * sin(time() * select_character.arrow_oscillation_speed)
 
         if btnp(4) then
+            player = select_character.characters[select_character.selected_index]
+            add_all(results.players, select_character.characters)
+            add_all(results.players, select_character.extras)
+            del(results.players, player)
             fade(true, function ()
-                player = select_character.characters[select_character.selected_index]
                 title_screen.init()
             end)
         end
@@ -158,10 +163,8 @@ select_character = {
     draw = function()
         cls()
         palt(0, false)
-        rectfill(0,0,127,127,9)
-        rectfill(0,32,127,127-32,14)
-        pal(9,129,1)
-        pal(14,140,1)
+        palt(4, true)
+        bg(32, 127-64)
         local list_start_x = 8
         local list_start_y = 40
         local sprite_w = 48
@@ -200,13 +203,12 @@ select_character = {
 
         -- Desenhar a seta oscilante no canto inferior direito
         local arrow_x = 88
-        local arrow_y = 26 + select_character.arrow_y_offset
+        local arrow_y = 24 + select_character.arrow_y_offset
         if(select_character.selected_index > 1) print("⬆️", arrow_x, arrow_y)
-        arrow_y = 98 - select_character.arrow_y_offset
+        arrow_y = 100 - select_character.arrow_y_offset
         if(select_character.selected_index < #select_character.characters) print("⬇️", arrow_x, arrow_y)
 
-        print("ok🅾️", 105, 115, 7)
-        print("❎voltar", 48 + 4 + 8, 115, 7)
+        actions(true, true, 48+8)
     end,
 
     draw_bar = function(lbl, percentage, x, y, width, height)
@@ -240,4 +242,11 @@ function split_description(description)
     end
 
     return lines
+end
+
+-- Função para adicionar todos os elementos de uma tabela em outra
+function add_all(dest, src)
+    for i = 1, #src do
+        add(dest, src[i])
+    end
 end
