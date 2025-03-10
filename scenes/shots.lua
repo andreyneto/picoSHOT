@@ -29,7 +29,7 @@ shots = {
         shots.shots = {}
         shots.max_shots = 5
         shots.current_shot = 0
-        shots.next_shot_timer = 5 * 60
+        shots.next_shot_timer = 3 * 60
         shots.radius_limit = 36
         shots.shake_intensity = 0
         shots.shake_duration = 0
@@ -42,7 +42,7 @@ shots = {
             else
                 add(shots.shots, {x = -100, y = -100, point = 0, success = false})
                 shots.state = "next_shot"
-                shots.next_shot_timer = 5 * 60
+                shots.next_shot_timer = 3 * 60
             end
 
             if btn(0) then
@@ -133,7 +133,7 @@ shots = {
                 add(shots.shots, {x = shots.shot_x, y = shots.shot_y, success = success, point = point})
 
                 shots.state = "next_shot"
-                shots.next_shot_timer = 5 * 60
+                shots.next_shot_timer = 3 * 60
 
                 shots.shake_duration = 10
             end
@@ -181,7 +181,7 @@ shots = {
                     shots.next_shot.color = 12
             end
             if shots.next_shot_timer > 0 then
-                if shots.next_shot_timer == 5 * 60 then
+                if shots.next_shot_timer == 3 * 60 then
                     shots.next_shot.state = "sliding_in"
                     shots.next_shot.x_position = 127
                 end
